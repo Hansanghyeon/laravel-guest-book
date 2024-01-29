@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +32,4 @@ Route::middleware('auth')->group(function () {
 Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
 Route::get('/auth/callback', [AuthController::class, 'callback']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
