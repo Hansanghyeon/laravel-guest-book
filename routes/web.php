@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CommentController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -34,5 +33,6 @@ Route::get('/auth/github/callback', [AuthController::class, 'github_callback']);
 Route::get('/auth/google/redirect', [AuthController::class, 'google_redirect'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [AuthController::class, 'google_callback']);
 
+Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.add');
 
 require __DIR__ . '/auth.php';
