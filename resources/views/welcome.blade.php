@@ -832,10 +832,10 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="antialiased">
+<body class="antialiased mac-scrollba-t dark:bg-gray-900">
   <div
     class="relative min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 dark:text-white">
-    <div class="container mx-auto p-6 lg:p-8">
+    <div class="container mx-auto p-6 lg:p-8 lg:py-[100px]">
       <div class="grid justify-center text-center gap-y-[8px]">
         <x-logo class="text-[148px]" />
         <h1 class="text-2xl font-bold mb-4">guest book</h1>
@@ -844,59 +844,65 @@
       <div x-data="{ open: false }">
         @auth()
           <div class="max-w-md mx-auto mt-6">
-            <form method="post" action="{{ route('comments.add') }}">
+            <form id="create_post" method="post" action="{{ route('comments.add') }}">
               @csrf
               <textarea name="commentStory" class="resize-none w-full h-32 bg-gray-600 border-none sm:rounded-md"></textarea>
-              <div class="w-full flex justify-between items-center mt-4">
-                <!-- Settings Dropdown -->
-                <div class="hidden sm:flex sm:items-center">
-                  <x-dropdown align="left" width="48">
-                    <x-slot name="trigger">
-                      <button type="button"
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-200 bg-gray-500 hover:bg-gray-700 focus:outline-none transition ease-in-out duration-150">
-                        <div>{{ Auth::user()->name }}</div>
-
-                        <div class="ms-1">
-                          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                              clip-rule="evenodd" />
-                          </svg>
-                        </div>
-                      </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                      <x-dropdown-link :href="route('profile.edit')">
-                        {{ __('프로필') }}
-                      </x-dropdown-link>
-
-                      <!-- Authentication -->
-                      <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-
-                        <x-dropdown-link :href="route('logout')"
-                          onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                          {{ __('로그아웃') }}
-                        </x-dropdown-link>
-                      </form>
-                    </x-slot>
-                  </x-dropdown>
-                </div>
-                <input type="submit" value="작성"
-                  class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-gray-200 rounded-md cursor-pointer text-sm transition-colors">
-              </div>
             </form>
+            <div class="w-full flex justify-between items-center mt-4">
+              <!-- Settings Dropdown -->
+              <div class="hidden sm:flex sm:items-center">
+                <x-dropdown align="left" width="48">
+                  <x-slot name="trigger">
+                    <button type="button"
+                      class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-200 bg-gray-500 hover:bg-gray-700 focus:outline-none transition ease-in-out duration-150">
+                      <div>{{ Auth::user()->name }}</div>
+
+                      <div class="ms-1">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                    </button>
+                  </x-slot>
+
+                  <x-slot name="content">
+                    <x-dropdown-link :href="route('profile.edit')">
+                      {{ __('프로필') }}
+                    </x-dropdown-link>
+
+                    <!-- Authentication -->
+                    <form method="POST" action="{{ route('logout') }}">
+                      @csrf
+
+                      <x-dropdown-link :href="route('logout')"
+                        onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                        {{ __('로그아웃') }}
+                      </x-dropdown-link>
+                    </form>
+                  </x-slot>
+                </x-dropdown>
+              </div>
+              <button
+                @click="document.getElementById('create_post').submit()"
+                class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-gray-200 rounded-md cursor-pointer text-sm transition-colors">
+                {{ __('작성') }}
+              </button>
+            </div>
           </div>
         @else
           <div class="max-w-md mx-auto mt-6">
             <form method="post" action="{{ route('comments.add') }}">
               @csrf
-              <textarea name="commentStory" class="resize-none w-full h-32 bg-gray-600 border-none sm:rounded-md"></textarea>
+              <textarea name="commentStory" disabled class="resize-none w-full h-32 bg-gray-600 border-none sm:rounded-md"></textarea>
               <div class="w-full flex justify-end items-center mt-4">
-                <input type="submit" value="작성"
-                  class="px-4 py-1 bg-gray-500 hover:bg-gray-700 text-gray-200 rounded-md cursor-pointer">
+                <div class="flex gap-x-[8px]">
+                    <a href="{{ route('auth.github.redirect') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        {{ __('GitHub login') }}
+                    </a>
+                </div>
               </div>
             </form>
           </div>
