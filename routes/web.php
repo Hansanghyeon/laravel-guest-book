@@ -29,7 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
-Route::get('/auth/callback', [AuthController::class, 'callback']);
+Route::get('/auth/github/redirect', [AuthController::class, 'github_redirect'])->name('auth.github.redirect');
+Route::get('/auth/github/callback', [AuthController::class, 'github_callback']);
+Route::get('/auth/google/redirect', [AuthController::class, 'google_redirect'])->name('auth.google.redirect');
+Route::get('/auth/google/callback', [AuthController::class, 'google_callback']);
+
 
 require __DIR__ . '/auth.php';

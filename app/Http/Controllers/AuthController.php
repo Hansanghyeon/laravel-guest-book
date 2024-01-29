@@ -8,12 +8,13 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
-    public function redirect()
+    // github
+    public function github_redirect()
     {
         return Socialite::driver('github')->redirect();
     }
 
-    public function callback()
+    public function github_callback()
     {
         $githubUser = Socialite::driver('github')->user();
 
@@ -21,13 +22,45 @@ class AuthController extends Controller
         $user = User::updateOrCreate([
             'email' => $githubUser->getEmail(),
         ], [
-            'provider_id' => $githubUser->getId(),
-            'name' => $githubUser->getName() ?? $githubUser->getNickname(),
-            'token' => $githubUser->token,
+            'name' => $githubUser->getName(),
+            // 'github_id' => $githubUser->getId(),
+            // 'nick_name' => $githubUser->getNickname(),
+            // 'github_avatar' => $githubUser->getAvatar(),
+            // 'github_token' => $githubUser->token,
+            // 'github_refresh_token' => $githubUser->refreshToken,
+            // 'expires_in' => $githubUser->expiresIn,
         ]);
 
         Auth::login($user);
 
-        return redirect('/dashboard');
+        return redirect('/');
+    }
+
+    // google
+    public function google_redirect()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function google_callback()
+    {
+        $githubUser = Socialite::driver('google')->user();
+
+        // 사용자가 존재하지 않는 경우 기존 사용자를 업데이트하십시오
+        $user = User::updateOrCreate([
+            'email' => $githubUser->getEmail(),
+        ], [
+            'name' => $githubUser->getName(),
+            // 'avatar' => $githubUser->getAvatar(),
+            // 'github_id' => $githubUser->getId(),
+            // 'nick_name' => $githubUser->getNickname(),
+            // 'github_token' => $githubUser->token,
+            // 'github_refresh_token' => $githubUser->refreshToken,
+            // 'expires_in' => $githubUser->expiresIn,
+        ]);
+
+        Auth::login($user);
+
+        return redirect('/');
     }
 }
