@@ -1,0 +1,17 @@
+version: "3.8"
+
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  laravel.test:
+    networks:
+      - traefik_proxy
+      - default
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${SERVICE}.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.${SERVICE}.loadbalancer.server.port=80
+      - traefik.http.routers.${SERVICE}.entrypoints=webs
+      - traefik.http.routers.${SERVICE}.tls.certresolver=leresolver
